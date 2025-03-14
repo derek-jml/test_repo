@@ -1,0 +1,54 @@
+module(name="test_artifact_registry")
+
+bazel_dep(name = "rules_python", version = "1.2.0")
+
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    # We can specify the exact version.
+    python_version = "3.11",
+)
+
+# You can use this repo mapping to ensure that your BUILD.bazel files don't need
+# to be updated when the python version changes to a different `3.9` version.
+use_repo(
+    python,
+    python_3_9 = "python_3_11",
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    
+    # experimental_requirement_cycles = {
+    #     "sphinx": [
+    #         "sphinx",
+    #         "sphinxcontrib-serializinghtml",
+    #         "sphinxcontrib-qthelp",
+    #         "sphinxcontrib-htmlhelp",
+    #         "sphinxcontrib-devhelp",
+    #         "sphinxcontrib-applehelp",
+    #     ],
+    # },
+    
+    # Use the bazel downloader to query the simple API for downloading the sources
+    # Note, that we can use envsubst for this value.
+    experimental_index_url = "${PIP_INDEX_URL:-https://pypi.org/simple}",
+    # One can also select a particular index for a particular package.
+    # This ensures that the setup is resistant against confusion attacks.
+    # experimental_index_url_overrides = {
+    #    "my_package": "https://different-index-url.com",
+    # },
+    # Or you can specify extra indexes like with `pip`:
+    # experimental_extra_index_urls = [
+    #    "https://different-index-url.com",
+    # ],
+
+    experimental_index_url_overrides = {
+        "opacus": "https://us-central1-python.pkg.dev/steady-state-msmt-simulations/python-repo/simple",
+    },
+    hub_name = "pypi",
+    # We need to use the same version here as in the `python.toolchain` call.
+    python_version = "3.11",
+    requirements_lock = "//:requirements_lock.txt",
+)
+use_repo(pip, "pypi")

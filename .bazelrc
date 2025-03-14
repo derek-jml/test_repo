@@ -1,0 +1,1 @@
+common --credential_helper=us-central1-python.pkg.dev=%workspace%/tools/artifact_registry/cred_helper.sh
