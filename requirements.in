@@ -1,3 +1,4 @@
---extra-index-url https://pypi.org/simple
---extra-index-url https://us-central1-python.pkg.dev/steady-state-msmt-simulations/python-repo/simple
-opacus
+--index-url https://pypi.python.org/simple
+sampleproject
+--extra-index-url https://oauth2accesstoken@us-central1-python.pkg.dev/steady-state-msmt-simulations/python-repo/simple
+pmt-dummy==2025031701
